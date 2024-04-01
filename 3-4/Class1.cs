@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace _3_4
 {
-    class Product: IComparable
+    class Product: IComparable<Product>
     {
         private double _Weight;
         private string _Name, _Manufacturer;
@@ -43,13 +44,28 @@ namespace _3_4
             return string.Format("{0}({1}), {2}", _Name, _Manufacturer, _Weight);
         }
 
-        public int CompareTo(object o)
+        public override bool Equals(object obj)
         {
-            if (o is Product product)
-            {
-                return Name.CompareTo(product.Name);
-            }
-            else throw new ArgumentException("Некорректное значение параметра");
+            if (obj != null && GetType() == obj.GetType())
+                return this == (obj as Product);
+            else
+                return false;
+        }
+
+        public int CompareTo(Product o)
+        {
+            if (_Name.CompareTo(o._Name) != 0)
+                return _Name.CompareTo(o._Name);
+            else
+                if (_Manufacturer.CompareTo(o._Manufacturer) != 0)
+                    return _Manufacturer.CompareTo(o._Manufacturer);
+                else
+                    return _Weight.CompareTo(o._Weight);
+        }
+
+        public override int GetHashCode()
+        {
+            return _Name.GetHashCode() ^ _Manufacturer.GetHashCode() ^ _Weight.GetHashCode();
         }
     }
 }
