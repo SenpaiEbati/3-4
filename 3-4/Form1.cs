@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -70,14 +71,9 @@ namespace _3_4
         {
             if (Spisok_LB.SelectedIndex >= 0)
             {
-                for (int i = 0; i < Spisok_LB.Items.Count; i++)
-                {
-                    Product Item = Spisok_LB.Items[i] as Product;
-                    if (((double)DelDeliveryList_NUD.Value) >= Item.Weight)
-                    {
-                        Path.Remove(Item);
-                    }
-                }
+                Product Item = Spisok_LB.Items[Spisok_LB.SelectedIndex] as Product;
+                Path.RemoveWhere(Value => Value == Item);
+                   
                 ViewState();
                 Spisok_LB.Items.RemoveAt(Spisok_LB.SelectedIndex);
             }
@@ -104,20 +100,14 @@ namespace _3_4
 
         private void DelDeliveryList_B_Click(object sender, EventArgs e)
         {
-            if (Spisok_LB.SelectedIndex >= 0)
+            if (Path.Count > 0)
             {
-                for (int i = 0; i < Spisok_LB.Items.Count; i++)
-                {
-                    Product Item = Spisok_LB.Items[i] as Product;
-                    if (Convert.ToDouble(DelDeliveryList_NUD.Value) >= Item.Weight)
-                        Path.Remove(Item);
-                    
-                }
+                Path.RemoveWhere(Convert.ToDouble(DelDeliveryList_NUD.Value) >= Value);
                 ViewState();
             }
             else
                 MessageBox.Show(
-                "Не выбран товар для удаления из списка поставки",
+                "Нет товаров в списке поставки для удаления",
                 "Информация", MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
         }
@@ -169,6 +159,16 @@ namespace _3_4
                 MessageBox.Show("В списке поставке нету товаров(",
                                 "Информация", MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Product Temp1 = new Product("abc", "def", 12);
+            Spisok_LB.Items.Add(Temp1);
+            Product Temp2 = new Product("abc", "def", 12);
+            Spisok_LB.Items.Add(Temp2);
+            textBox1.Text = Temp1.Equals(Temp2).ToString();
+            textBox2.Text=Temp1.CompareTo(Temp2).ToString();
         }
     }
 }

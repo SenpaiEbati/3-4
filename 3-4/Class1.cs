@@ -47,7 +47,12 @@ namespace _3_4
         public override bool Equals(object obj)
         {
             if (obj != null && GetType() == obj.GetType())
-                return this == (obj as Product);
+            {
+                if (this.Name == ((Product)obj).Name && this.Manufacturer == ((Product)obj).Manufacturer && this.Weight == ((Product)obj).Weight)
+                    return true;
+                else
+                    return false;
+            }
             else
                 return false;
         }
