@@ -102,7 +102,11 @@ namespace _3_4
         {
             if (Path.Count > 0)
             {
-                Path.RemoveWhere(Convert.ToDouble(DelDeliveryList_NUD.Value) >= Value);
+                for (int i = 0; i < Path.Count; i++)
+                {
+                    Product Item = Spisok_LB.Items[i] as Product;
+                    Path.RemoveWhere(Value => Value.Weight == Item.Weight);
+                }
                 ViewState();
             }
             else
