@@ -102,11 +102,9 @@ namespace _3_4
         {
             if (Path.Count > 0)
             {
-                for (int i = 0; i < Path.Count; i++)
-                {
-                    Product Item = Spisok_LB.Items[i] as Product;
-                    Path.RemoveWhere(Value => Value.Weight == Item.Weight);
-                }
+                double DelWeight = Convert.ToDouble(DelDeliveryList_NUD.Value);
+                Path.RemoveWhere(Value => Value.Weight < DelWeight);
+                
                 ViewState();
             }
             else
@@ -149,15 +147,7 @@ namespace _3_4
         {
             if (Path.Count > 0)
             {
-                double sum = 0.0;
-                for (int i = 0; i < Spisok_LB.Items.Count; i++)
-                {
-                    Product Item = Spisok_LB.Items[i] as Product;
-                    if (Path.Contains(Item))
-                        sum += Item.Weight;
-                }
-
-                SumWeightDeliveryList_TB.Text = sum.ToString();
+                SumWeightDeliveryList_TB.Text = Path.Sum(Value => Value.Weight).ToString();
             }
             else
                 MessageBox.Show("В списке поставке нету товаров(",
